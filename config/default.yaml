@@ -1,1 +1,5 @@
 application: test
+
+amazon:
+  access_key_id: accesskeyid
+  access_key_secret: accesskeysecret
