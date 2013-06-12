@@ -16,7 +16,7 @@ Usage:
 ======
 
 ```
-$ ./sync.py --config [path] srcdirectory s3bucket
+$ ./s3sync --config [path] srcdirectory s3bucket
 ```
 
 You can also use the `-i` flag to create thumbnails on the fly
