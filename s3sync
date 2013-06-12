@@ -26,14 +26,6 @@ def main():
   if not(os.path.exists(arguments[0])):
     p.error("The source path '{path}' does not exist.".format(path=arguments[0]))
 
-  # Validate the Config File
-
-  if(not(os.path.exists(options.configFile))):
-    p.error("Configuration file '{path}' does not exist.".format(path=options.configFile))
-
-  if 'amazon' not in config or 'access_key_id' not in config['amazon'] or 'access_key_secret' not in config['amazon']:
-    p.error("Please specify the amazon access key and access secret in your configuration file.")
-
   # Load Configuration Settings
 
   try:
@@ -44,12 +36,22 @@ def main():
   except yaml.scanner.ScannerError:
     p.error("An error occurred when trying to read '{path}' for configuration. Possibly due to a format error.".format(path=options.configFile))
 
+  # Validate the Config File
+
+  if(not(os.path.exists(options.configFile))):
+    p.error("Configuration file '{path}' does not exist.".format(path=options.configFile))
+
+  if ('amazon' not in config) or ('access_key_id' not in config['amazon']) or ('access_key_secret' not in config['amazon']):
+    p.error("Please specify the amazon access key and access secret in your configuration file.")
+
+
+
   # Begin Processing Media
   if options.createThumbs == True:
-    amazon.createThumbs(arguments[0])
+    amazon.createThumbs(arguments[0], config['media']['thumb_sizes'])
 
 
-  amazon.uploadThumbs(arguments[0], arguments[1], config['amazon']['access_key_id'], config['amazon']['access_key_secret'])
+  #amazon.uploadThumbs(arguments[0], arguments[1], config['amazon']['access_key_id'], config['amazon']['access_key_secret'])
 
 
 if __name__ == '__main__':

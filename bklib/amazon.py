@@ -5,7 +5,14 @@ from PIL import Image
 
 import urllib2
 
-def createThumbs(src):
+def createThumbs(src, thumb_config=None):
+
+  if thumb_config == None:
+    thumb_config = {
+      '75' : { 'w': 75, 'h': 75 },
+      '500' : { 'w': 500, 'h': 500 },
+      '800' : { 'w': 800, 'h': 800 }
+    }
 
   sys.stdout.write("Creating Thumbs...\n")
   sys.stdout.flush()
@@ -15,23 +22,13 @@ def createThumbs(src):
     for filename in filenames:
       name, ext = filename.split('.')
       if ext == 'jpg':
-        size = 800, 800
-        im800 = Image.open(os.path.join(dirname, filename))
-        im800.thumbnail(size, Image.ANTIALIAS)
-        im800.save(dirname + "/" + name + "_800" + ".jpg")
-        print "saving:", dirname + "/" + name + "_800" + ".jpg"
-
-        size = 250, 250
-        im250 = Image.open(os.path.join(dirname, filename))
-        im250.thumbnail(size, Image.ANTIALIAS)
-        im250.save(dirname + "/" + name + "_250" + ".jpg")
-        print "saving:", dirname + "/" + name + "_250" + ".jpg"
-
-        size = 75, 75
-        im75 = Image.open(os.path.join(dirname, filename))
-        im75.thumbnail(size, Image.ANTIALIAS)
-        im75.save(dirname + "/" + name + "_75" + ".jpg")
-        print "saving:", dirname + "/" + name + "_75" + ".jpg"
+        for label, thumb_size in thumb_config.iteritems():
+          size = thumb_size['w'], thumb_size['h']
+          im = Image.open(os.path.join(dirname, filename))
+          im.thumbnail(size, Image.ANTIALIAS)
+          im.save(dirname + "/" + name + "_" + str(label) + ".jpg")
+          sys.stdout.write("Saving: " + dirname + "/" + name + "_" + str(label) + ".jpg...\n")
+          sys.stdout.flush()
 
 def uploadThumbs(src, bucket_name, aws_access_id, aws_access_secret):
   updated_keys = 0
