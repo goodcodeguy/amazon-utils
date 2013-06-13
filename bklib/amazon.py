@@ -67,11 +67,28 @@ def getAssets(bucket_name, dest, aws_access_id, aws_access_secret):
   conn = boto.connect_s3(aws_access_id, aws_access_secret)
   bucket = conn.get_bucket(bucket_name)
 
+  # Add trailing slash if it isn't there
+  if dest[:-1] != '/':
+    dest = dest + '/'
+
   for l in bucket.list():
     keyString = str(l.key)
 
-    if(not os.path.exists(dest + keyString)):
-      l.get_contents_to_filename(dest + keyString)
+    path = os.path.dirname(keyString)
+    filename = os.path.basename(keyString)
+
+    if path[0:2] == './':
+      path = path[2:]
+
+    if not os.path.exists(dest + path):
+      os.makedirs(dest + path)
+    
+    if not os.path.exists(dest + path + "/" + filename):
+      sys.stdout.write('Downloading ' + keyString + ' [' + bucket_name + '] to ' + dest + path + "/" + filename)
+      l.get_contents_to_filename(dest + path + "/" + filename, cb=done_cb)
+      sys.stdout.write("\n")
+      sys.stdout.flush()
+
 
 def makeFilesPublic(bucket):
   bucket_list = bucket.list()

@@ -6,20 +6,37 @@ This is just a series of amazon utilities I wrote to manage resources on Amazon.
 Installation:
 =============
 
+Install Dependencies (only run the line that pertains to your package manager):
+
 ```
-$ git clone git://github.com/goodcodeguy/amazon-utils.git
+(homebrew) $ brew install libjpeg
+(macports) $ port install jpeg
+(ubuntu)   $ sudo apt-get install libjpeg8
 ```
 
-then change into the directory of the repo and run `pip install -r deps.txt` to install python dependencies.
+Clone the Repository and install the python dependencies:
+
+```
+$ git clone git://github.com/goodcodeguy/amazon-utils.git amazon-utils && cd amazon-utils
+$ pip install -r deps.txt
+```
 
 Usage:
 ======
 
+__s3put__
+
 ```
-$ ./s3sync --config [path] srcdirectory s3bucket
+$ ./s3put --config [configfile] srcdirectory s3bucket
+```
+You can also use the `-i` flag to create thumbnails on the fly __(requires libjpeg to be installed as described above)__
+
+__s3get__
+
+```
+$ ./s3get --config [configfile] s3bucket destinationfolder
 ```
 
-You can also use the `-i` flag to create thumbnails on the fly
 
 Configuration:
 ==============

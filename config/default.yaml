@@ -1,5 +1,18 @@
+# Application Name
+# Just used as a label
 application: test
 
+# Amazon API Access Information
+amazon:
+  access_key_id: accesskeyid
+  access_key_secret: accesskeysecret
+
+# thumbnail configuration
+# to add a new thumbnail size to be generated add a new entry under "thumb_sizes:"
+#
+# 100: # label for file, file will be called filename_<label>.jpg (filename_100.jpg in this case)
+#    w: 100 # width
+#    h: 100 # height
 media:
   thumb_sizes:
     75:
@@ -11,7 +24,3 @@ media:
     800:
       w: 800
       h: 800
-
-amazon:
-  access_key_id: accesskeyid
-  access_key_secret: accesskeysecret
