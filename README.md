@@ -3,7 +3,7 @@ Amazon Utilties
 
 This is a series of amazon utilities I wrote to manage resources on Amazon.  Right now it just manages S3 commits.
 
-==Installation:
+##Installation:
 
 Install Dependencies (only run the line that pertains to your package manager):
 
@@ -20,7 +20,7 @@ $ git clone git://github.com/goodcodeguy/amazon-utils.git amazon-utils && cd ama
 $ pip install -r deps.txt
 ```
 
-==Usage:
+##Usage:
 
 __s3put__
 
@@ -36,6 +36,6 @@ $ ./s3get --config [configfile] s3bucket destinationfolder
 ```
 
 
-==Configuration:
+##Configuration:
 
 Configuration syntax is YAML.  Take a look at `config/default.yaml` for an example.
