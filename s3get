@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+
+APPNAME = "Amazon S3 File Get"
+VERSION = 1.0
+VERSION_STR = APPNAME + " " + str(VERSION)
+USAGE = "usage: %prog [options] bucket dest"
+
+import os, optparse, yaml
+
+from bklib import *
+
+def main():
+  config = None
+
+  p = optparse.OptionParser(usage=USAGE, version=VERSION_STR)
+  p.add_option('-c', '--config', default='config/default.yaml', metavar="FILEPATH", dest='configFile')
+  p.add_option('-v', '--verbose', default=False, action="store_true", dest="verbose")
+
+  options, arguments = p.parse_args()
+
+   # Load Configuration Settings
+
+  try:
+    with open(options.configFile) as f:
+      config = yaml.load(f)
+  except IOError:
+    p.error("An error occurred when trying to open '{path}' for configuration".format(path=options.configFile))
+  except yaml.scanner.ScannerError:
+    p.error("An error occurred when trying to read '{path}' for configuration. Possibly due to a format error.".format(path=options.configFile))
+
+  # Validate the Config File
+
+  if(not(os.path.exists(options.configFile))):
+    p.error("Configuration file '{path}' does not exist.".format(path=options.configFile))
+
+  if ('amazon' not in config) or ('access_key_id' not in config['amazon']) or ('access_key_secret' not in config['amazon']):
+    p.error("Please specify the amazon access key and access secret in your configuration file.")
+
+  getAssets(arguments[0], arguments[1], config['amazon']['access_key_id'], config['amazon']['access_key_secret'])
+
+
+def getAssets(bucket, dest, aws_access_key, aws_access_secret):
+  amazon.getAssets(bucket, dest, aws_access_key, aws_access_secret)
+
+if __name__ == '__main__':
+  main()

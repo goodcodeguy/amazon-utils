@@ -63,6 +63,15 @@ def done_cb(complete, total):
   sys.stdout.write('.')
   sys.stdout.flush()
 
+def getAssets(bucket_name, dest, aws_access_id, aws_access_secret):
+  conn = boto.connect_s3(aws_access_id, aws_access_secret)
+  bucket = conn.get_bucket(bucket_name)
+
+  for l in bucket.list():
+    keyString = str(l.key)
+
+    if(not os.path.exists(dest + keyString)):
+      l.get_contents_to_filename(dest + keyString)
 
 def makeFilesPublic(bucket):
   bucket_list = bucket.list()

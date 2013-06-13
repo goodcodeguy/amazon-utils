@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-APPNAME = "Amazon S3 File Sync"
+APPNAME = "Amazon S3 File Put"
 VERSION = 1.0
 VERSION_STR = APPNAME + " " + str(VERSION)
 USAGE = "usage: %prog [options] src dst"
@@ -15,6 +15,8 @@ def main():
   p = optparse.OptionParser(usage=USAGE, version=VERSION_STR)
   p.add_option('-i', '--images', default=False, action="store_true", dest="createThumbs")
   p.add_option('-c', '--config', default='config/default.yaml', metavar="FILEPATH", dest='configFile')
+  p.add_option('-v', '--verbose', default=False, action="store_true", dest="verbose")
+  p.add_option('-p', '--private', default=False, action="store_true")
 
   options, arguments = p.parse_args()
 
@@ -44,14 +46,17 @@ def main():
   if ('amazon' not in config) or ('access_key_id' not in config['amazon']) or ('access_key_secret' not in config['amazon']):
     p.error("Please specify the amazon access key and access secret in your configuration file.")
 
-
-
   # Begin Processing Media
   if options.createThumbs == True:
-    amazon.createThumbs(arguments[0], config['media']['thumb_sizes'])
+    createThumbs(arguments[0], config['media']['thumb_sizes'])
 
+  uploadThumbs(arguments[0], arguments[1], config['amazon']['access_key_id'], config['amazon']['access_key_secret'])
 
-  #amazon.uploadThumbs(arguments[0], arguments[1], config['amazon']['access_key_id'], config['amazon']['access_key_secret'])
+  def createThumbs(path, size_configuration):
+    amazon.createThumbs(path, size_configuration)
+
+  def uploadThumbs(src, dest, access_key, access_secret):
+    amazon.uploadThumbs(src, dest, access_key, access_secret)
 
 
 if __name__ == '__main__':
